@@ -4,22 +4,28 @@ import { ArrowRight, BookOpen, Globe, Youtube, Award } from "lucide-react"
 
 export default function Home() {
   return (
-    <main className="container mx-auto px-4 py-12">
-      <section className="text-center mb-16">
-        <h1 className="text-5xl font-bold text-maroon mb-4">Welcome to INTELLICA</h1>
-        <p className="text-2xl text-orange-700 mb-8">Your Personalized Learning Assistant</p>
-        <div className="space-y-6">
+    <main className="container mx-auto px-4 py-20 flex flex-col items-center text-center"> 
+    <section className="mb-20">
+      <h1 className="text-6xl font-bold text-maroon mb-6">Welcome to INTELLICA</h1>
+      <p className="text-2xl text-orange-700 mb-10">Your Personalized Learning Assistant</p>
+  
+      {/* Wrapping everything in a div with flex-center */}
+      <div className="flex flex-col items-center space-y-8">
+        {/* Get Started Button - Fully Centered */}
+        <Link href="/register">
           <Button
-            asChild
-            className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-6 rounded-full text-xl transition-all transform hover:scale-105 shadow-lg"
+            className="bg-orange-500 hover:bg-maroon text-white px-10 py-7 rounded-full text-xl transition-all transform hover:scale-110 shadow-xl flex items-center justify-center"
           >
-            <Link href="/register">
-              Get Started <ArrowRight className="ml-2" />
-            </Link>
+            Get Started <ArrowRight className="ml-2" />
           </Button>
-          <p className="text-maroon text-lg">Discover tailored courses and learning paths designed just for you!</p>
-        </div>
-      </section>
+        </Link>
+  
+        {/* Supporting Text */}
+        <p className="text-maroon text-xl font-medium">
+          Discover tailored courses and learning paths designed just for you!
+        </p>
+      </div>
+    </section>
 
       <section className="mt-16 grid md:grid-cols-2 gap-8">
         {[
@@ -87,17 +93,21 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mt-16 text-center">
-        <h2 className="text-3xl font-bold text-maroon mb-8">Ready to Start Your Learning Journey?</h2>
-        <Button
-          asChild
-          className="bg-maroon hover:bg-orange-600 text-white px-8 py-4 rounded-full text-xl transition-all transform hover:scale-105 shadow-lg"
-        >
-          <Link href="/register">
-            Create Your Account Now <ArrowRight className="ml-2" />
-          </Link>
-        </Button>
-      </section>
+      <section className="mt-20 flex flex-col items-center text-center">
+  <h2 className="text-4xl font-bold text-maroon mb-8">
+    Ready to Start Your Learning Journey?
+  </h2>
+
+  {/* Fully Centered Button */}
+  <Link href="/register">
+    <Button
+      className="bg-orange-500 hover:bg-maroon text-white px-10 py-6 rounded-full text-xl transition-all transform hover:scale-110 shadow-xl flex items-center justify-center"
+    >
+      Create Your Account Now <ArrowRight className="ml-2" />
+    </Button>
+  </Link>
+</section>
+
     </main>
   )
 }
