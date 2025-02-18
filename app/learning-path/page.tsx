@@ -1,76 +1,113 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "../../components/ui/button";
-import { CheckCircle } from "lucide-react";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Textarea } from "../../components/ui/textarea";
 
 export default function LearningPath() {
-  const [learningPrompt, setLearningPrompt] = useState(true);
-  const [userResponse, setUserResponse] = useState<string | null>(null);
+  const [goal, setGoal] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [sendEmail, setSendEmail] = useState(false);
+  const [learningPath, setLearningPath] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  // Remove the message block after 3-4 seconds when a response is selected
-  useEffect(() => {
-    if (userResponse !== null) {
-      const timer = setTimeout(() => {
-        setLearningPrompt(false);
-      }, 3500);
+  const generateLearningPath = async () => {
+    setMessage("");
+    setLearningPath(null);
 
-      return () => clearTimeout(timer);
+    if (!goal) {
+      setMessage("❌ Please enter your learning goal.");
+      return;
     }
-  }, [userResponse]);
+
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:8000/learning/generate_learning_path/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: "test-user",
+          goal,
+          send_email: sendEmail,
+          user_email: sendEmail ? userEmail : undefined,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("🔍 API Response:", data); // ✅ LOG THE RESPONSE
+
+      if (response.ok) {
+        setLearningPath(data);
+      } else {
+        console.error("❌ API Error:", data.detail || "Unknown error");
+        setMessage(data.detail || "❌ Learning path generation failed.");
+      }
+    } catch (error) {
+      console.error("❌ Server error:", error);
+      setMessage("❌ Server error. Please try again.");
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-maroon mb-8">Your Learning Path</h1>
+      <h1 className="text-3xl font-bold text-maroon mb-8">Generate Your Learning Path</h1>
+      
+      {/* Input for Learning Goal */}
+      <Label className="text-lg font-semibold">Enter Learning Goal</Label>
+      <Textarea
+        value={goal}
+        onChange={(e) => setGoal(e.target.value)}
+        className="mb-4 w-full p-2 border rounded-lg"
+        placeholder="E.g. I want to become a full-stack developer with Web3 and AI integration..."
+      />
 
-      {/* Continuous Learning Prompt */}
-      {learningPrompt && (
-        <div className="bg-orange-100 text-maroon p-4 rounded-lg shadow-md mb-6 text-center">
-          {userResponse === null ? (
-            <>
-              <p className="text-lg font-semibold mb-2">
-                Are you interested in continuous learning?
-              </p>
-              <div className="flex justify-center space-x-4">
-                <Button variant="outline" onClick={() => setUserResponse("yes")}>Yes</Button>
-                <Button variant="outline" onClick={() => setUserResponse("no")}>No</Button>
-              </div>
-            </>
-          ) : (
-            <p className="text-lg font-semibold">
-              {userResponse === "yes"
-                ? "Great choice! Keep learning and growing 🚀"
-                : "That's okay! Learning at your own pace is important too 😊"}
-            </p>
-          )}
-        </div>
+      {/* Checkbox for Email Notification */}
+      {/* <div className="flex items-center mb-4">
+        <input
+          type="checkbox"
+          checked={sendEmail}
+          onChange={() => setSendEmail(!sendEmail)}
+          className="mr-2"
+        />
+        <Label>Send learning path to my email</Label>
+      </div> */}
+
+      {/* Email Input (only if checkbox is checked) */}
+      {sendEmail && (
+        <>
+          <Label className="text-lg font-semibold">Enter Your Email</Label>
+          <Input
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}
+            className="mb-4 w-full p-2 border rounded-lg"
+            placeholder="you@example.com"
+          />
+        </>
       )}
 
-      {/* Learning Path Courses */}
-      <div className="space-y-6">
-        {[
-          { title: "Introduction to Programming", completed: true },
-          { title: "Web Development Basics", completed: true },
-          { title: "JavaScript Fundamentals", completed: false, progress: "30% Completed" },
-          { title: "React.js Essentials", completed: false, progress: "45% Completed" },
-          { title: "Backend Development with Node.js", completed: false, progress: "20% Completed" },
-          { title: "DevOps & CI/CD Pipelines", completed: false },
-        ].map((course, index) => (
-          <div key={index} className="bg-white/90 p-6 rounded-lg shadow-lg flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-orange-700">{course.title}</h2>
-              <p className="text-maroon">
-                {course.completed ? "Completed" : course.progress || ""}
-              </p>
-            </div>
-            {course.completed ? (
-              <CheckCircle className="text-green-500 w-6 h-6" />
-            ) : (
-              <Button>{course.progress ? "Continue" : "Start Course"}</Button>
-            )}
-          </div>
-        ))}
-      </div>
+      {/* Generate Button */}
+      <Button onClick={generateLearningPath} disabled={loading}>
+        {loading ? "Generating..." : "Generate Learning Path"}
+      </Button>
+
+      {/* Error or Success Message */}
+      {message && <p className="text-red-600 mt-4 font-semibold">{message}</p>}
+
+      {/* Display Learning Path */}
+      {learningPath && (
+        <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-bold text-maroon mb-4">📚 Your Learning Path</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            {learningPath.learning_path.map((step, index) => (
+              <li key={index} className="text-gray-700">{step}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
