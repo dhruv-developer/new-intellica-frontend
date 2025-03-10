@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
@@ -58,10 +58,11 @@ export default function Courses() {
   };
 
   // ✅ Filter Courses
-  const filteredCourses = courses.filter((course) =>
-    (filters.platform === "" || course.platform === filters.platform) &&
-    course.rating >= filters.minRating &&
-    course.price <= filters.maxPrice
+  const filteredCourses = courses.filter(
+    (course) =>
+      (filters.platform === "" || course.platform === filters.platform) &&
+      course.rating >= filters.minRating &&
+      course.price <= filters.maxPrice
   );
 
   return (
@@ -75,6 +76,7 @@ export default function Courses() {
           id="user_id"
           placeholder="Enter User ID"
           className="caret-black text-black placeholder-black mb-4"
+          value={userId}
           onChange={(e) => setUserId(e.target.value)}
         />
 
@@ -132,8 +134,10 @@ export default function Courses() {
               <span className="text-maroon font-semibold">{course.rating}</span>
             </div>
             <p className="text-maroon mb-2">Price: ₹{course.price}</p>
-            <Button asChild>
-              <a href={course.link} target="_blank" rel="noopener noreferrer">Enroll Now</a>
+            <Button>
+              <a href={course.link} target="_blank" rel="noopener noreferrer" className="block w-full text-center">
+                Enroll Now
+              </a>
             </Button>
           </div>
         ))}
