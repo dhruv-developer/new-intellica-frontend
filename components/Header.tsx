@@ -52,7 +52,7 @@ export default function Header() {
 
         {/* Buttons - Visible on Desktop */}
         <div className="hidden md:flex space-x-2">
-          <Link href="/login">
+          {/* <Link href="/login">
             <Button className="text-cream border-cream bg-orange-500 hover:bg-maroon transition-colors">
               Login
             </Button>
@@ -61,7 +61,7 @@ export default function Header() {
             <Button className="text-cream border-cream bg-orange-500 hover:bg-maroon transition-colors">
               Sign Up
             </Button>
-          </Link>
+          </Link> */}
           <Link href="/profile">
             <Button className="text-cream border-cream bg-orange-500 hover:bg-maroon transition-colors">
               View Profile

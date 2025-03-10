@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* ✅ Clickable Text Link Below Header */}
         <div className="text-center mt-4">
-          <Link href="/daily-updates">
+          <Link href="/daily-content">
             <span className="text-maroon font-semibold text-lg cursor-pointer hover:underline">
               👉 Click here for Problem of the Day & Latest News
             </span>
