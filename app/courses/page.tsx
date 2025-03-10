@@ -7,9 +7,18 @@ import { Label } from "../../components/ui/label";
 import { Select } from "../../components/ui/select";
 import { Star } from "lucide-react";
 
+// ✅ Define Course Type
+type Course = {
+  title: string;
+  platform: string;
+  rating: number;
+  price: number;
+  link: string;
+};
+
 export default function Courses() {
   const [userId, setUserId] = useState(""); // Store User ID
-  const [courses, setCourses] = useState([]); // Store fetched courses
+  const [courses, setCourses] = useState<Course[]>([]); // ✅ Typed courses array
   const [filters, setFilters] = useState({
     platform: "",
     minRating: 0,
@@ -49,7 +58,7 @@ export default function Courses() {
   };
 
   // ✅ Filter Courses
-  const filteredCourses = courses.filter(course => 
+  const filteredCourses = courses.filter((course) =>
     (filters.platform === "" || course.platform === filters.platform) &&
     course.rating >= filters.minRating &&
     course.price <= filters.maxPrice
@@ -68,7 +77,7 @@ export default function Courses() {
           className="caret-black text-black placeholder-black mb-4"
           onChange={(e) => setUserId(e.target.value)}
         />
-        
+
         <Label className="text-black">Number of Courses</Label>
         <Input
           type="number"
@@ -87,7 +96,10 @@ export default function Courses() {
 
       {/* ✅ Filters Section */}
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <Select onChange={(e) => setFilters({ ...filters, platform: e.target.value })}>
+        <Select
+          value={filters.platform}
+          onChange={(e) => setFilters({ ...filters, platform: e.target.value })}
+        >
           <option value="">All Platforms</option>
           <option value="Udemy">Udemy</option>
           <option value="Coursera">Coursera</option>
@@ -97,12 +109,14 @@ export default function Courses() {
         <Input
           type="number"
           placeholder="Min Rating"
+          value={filters.minRating}
           onChange={(e) => setFilters({ ...filters, minRating: Number(e.target.value) })}
         />
-        
+
         <Input
           type="number"
           placeholder="Max Price"
+          value={filters.maxPrice}
           onChange={(e) => setFilters({ ...filters, maxPrice: Number(e.target.value) })}
         />
       </div>
@@ -114,12 +128,12 @@ export default function Courses() {
             <h2 className="text-xl font-semibold text-orange-700 mb-2">{course.title}</h2>
             <p className="text-maroon mb-2">Platform: {course.platform}</p>
             <div className="flex items-center mb-4">
-              {/* <Star className="text-yellow-400 w-5 h-5 mr-1" /> */}
-              {/* <span className="text-maroon font-semibold">{course.rating}</span> */}
+              <Star className="text-yellow-400 w-5 h-5 mr-1" />
+              <span className="text-maroon font-semibold">{course.rating}</span>
             </div>
-            {/* <p className="text-maroon mb-2">Price: ₹{course.price}</p> */}
+            <p className="text-maroon mb-2">Price: ₹{course.price}</p>
             <Button asChild>
-              <a href={course.link} target="_blank">Enroll Now</a>
+              <a href={course.link} target="_blank" rel="noopener noreferrer">Enroll Now</a>
             </Button>
           </div>
         ))}
