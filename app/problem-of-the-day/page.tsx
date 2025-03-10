@@ -5,9 +5,14 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 
+interface ProblemData {
+  problem: string;
+  hint: string;
+}
+
 export default function ProblemOfTheDay() {
   const [userId, setUserId] = useState("");
-  const [problem, setProblem] = useState(null);
+  const [problem, setProblem] = useState<ProblemData | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -21,7 +26,7 @@ export default function ProblemOfTheDay() {
     setLoading(true);
     try {
       const response = await fetch(`http://localhost:8000/daily-content/?user_id=${userId}`, {
-        method: "GET",  // ✅ FIX: Changed from POST to GET
+        method: "GET",
         headers: { "Content-Type": "application/json" },
       });
   
@@ -36,7 +41,6 @@ export default function ProblemOfTheDay() {
     }
     setLoading(false);
   };
-  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-cream via-orange-50 to-cream px-6 text-center">
@@ -54,8 +58,8 @@ export default function ProblemOfTheDay() {
 
         {problem && (
           <div className="mt-6">
-            <h2 className="text-lg font-semibold text-maroon mb-2">📌 {problem.problem}</h2>
-            <p className="text-gray-700">{problem.hint}</p>
+            <h2 className="text-lg font-semibold text-maroon mb-2">📌 {problem?.problem}</h2>
+            <p className="text-gray-700">{problem?.hint}</p>
           </div>
         )}
       </div>
