@@ -27,7 +27,7 @@ export default function Quiz() {
     
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/quiz/start_quiz/", {  // ✅ Correct API path
+      const response = await fetch("https://visionx-backend.onrender.com/quiz/start_quiz/", {  // ✅ Correct API path
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: userId }),
@@ -58,7 +58,7 @@ export default function Quiz() {
 
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/quiz/answer_question/", {  // ✅ Correct API path
+      const response = await fetch("https://visionx-backend.onrender.com/quiz/answer_question/", {  // ✅ Correct API path
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
