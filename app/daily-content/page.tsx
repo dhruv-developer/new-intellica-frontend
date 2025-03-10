@@ -18,7 +18,7 @@ export default function DailyContent() {
       return;
     }
 
-    const url = `http://127.0.0.1:8000/daily-content/daily-content/?user_id=${userId}`;
+    const url = `https://visionx-backend.onrender.com/daily-content/?user_id=${userId}`;
     console.log("🔍 Fetching Daily Content from:", url);  // ✅ Log the final API call
 
     setLoading(true);
