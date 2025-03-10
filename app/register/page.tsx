@@ -36,7 +36,7 @@ export default function Register() {
     setMessage("");
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/user/register/", {
+      const response = await fetch("https://visionx-backend.onrender.com/user/register/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
