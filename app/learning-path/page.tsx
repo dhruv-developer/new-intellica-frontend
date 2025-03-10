@@ -25,7 +25,7 @@ export default function LearningPath() {
 
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/learning/generate_learning_path/", {
+      const response = await fetch("https://visionx-backend.onrender.com/learning/generate_learning_path/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
