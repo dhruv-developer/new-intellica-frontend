@@ -25,7 +25,7 @@ export default function YouTubeSummaries() {
     setLoading(true);
     try {
       // Construct API request URL with query parameters
-      const apiUrl = new URL("http://localhost:8000/youtube/youtube_summary/");
+      const apiUrl = new URL("https://visionx-backend.onrender.com/youtube/youtube_summary/");
       apiUrl.searchParams.append("youtube_url", youtubeUrl);
       apiUrl.searchParams.append("language_code", language);
       if (sendEmail) {
