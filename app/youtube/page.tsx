@@ -6,13 +6,20 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Youtube } from "lucide-react";
 
+interface SummaryData {
+  language: string;
+  summary: string;
+  video_url: string;
+  email_status?: string;
+}
+
 export default function YouTubeSummaries() {
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [language, setLanguage] = useState("en");
   const [sendEmail, setSendEmail] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [summaryData, setSummaryData] = useState(null);
+  const [summaryData, setSummaryData] = useState<SummaryData | null>(null);
   const [message, setMessage] = useState("");
 
   const fetchYouTubeSummary = async () => {
@@ -21,10 +28,9 @@ export default function YouTubeSummaries() {
       setMessage("❌ Please enter a YouTube URL.");
       return;
     }
-  
+
     setLoading(true);
     try {
-      // Construct API request URL with query parameters
       const apiUrl = new URL("https://visionx-backend.onrender.com/youtube/youtube_summary/");
       apiUrl.searchParams.append("youtube_url", youtubeUrl);
       apiUrl.searchParams.append("language_code", language);
@@ -32,12 +38,12 @@ export default function YouTubeSummaries() {
         apiUrl.searchParams.append("send_email", "true");
         apiUrl.searchParams.append("user_email", userEmail);
       }
-  
+
       const response = await fetch(apiUrl.toString(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
-  
+
       const data = await response.json();
       if (response.ok) {
         setSummaryData(data);
@@ -50,7 +56,7 @@ export default function YouTubeSummaries() {
     }
     setLoading(false);
   };
-  
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-maroon mb-8">YouTube Video Summaries</h1>
@@ -119,13 +125,13 @@ export default function YouTubeSummaries() {
             <h2 className="text-xl font-semibold text-orange-700">Summary</h2>
           </div>
           <p className="text-maroon mb-2">
-            <strong>Language:</strong> {summaryData.language}
+            <strong>Language:</strong> {summaryData?.language}
           </p>
-          <p className="text-gray-700 mb-4">{summaryData.summary}</p>
-          <a href={summaryData.video_url} target="_blank" rel="noopener noreferrer">
+          <p className="text-gray-700 mb-4">{summaryData?.summary}</p>
+          <a href={summaryData?.video_url} target="_blank" rel="noopener noreferrer">
             <Button>Watch Full Video</Button>
           </a>
-          {summaryData.email_status && (
+          {summaryData?.email_status && (
             <p className="mt-4 text-green-600">{summaryData.email_status}</p>
           )}
         </div>
