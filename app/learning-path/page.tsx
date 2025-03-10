@@ -6,11 +6,15 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Textarea } from "../../components/ui/textarea";
 
+interface LearningPathData {
+  learning_path: string[];
+}
+
 export default function LearningPath() {
   const [goal, setGoal] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [sendEmail, setSendEmail] = useState(false);
-  const [learningPath, setLearningPath] = useState(null);
+  const [learningPath, setLearningPath] = useState<LearningPathData | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -37,7 +41,7 @@ export default function LearningPath() {
       });
 
       const data = await response.json();
-      console.log("🔍 API Response:", data); // ✅ LOG THE RESPONSE
+      console.log("🔍 API Response:", data);
 
       if (response.ok) {
         setLearningPath(data);
@@ -65,17 +69,6 @@ export default function LearningPath() {
         placeholder="E.g. I want to become a full-stack developer with Web3 and AI integration..."
       />
 
-      {/* Checkbox for Email Notification */}
-      {/* <div className="flex items-center mb-4">
-        <input
-          type="checkbox"
-          checked={sendEmail}
-          onChange={() => setSendEmail(!sendEmail)}
-          className="mr-2"
-        />
-        <Label>Send learning path to my email</Label>
-      </div> */}
-
       {/* Email Input (only if checkbox is checked) */}
       {sendEmail && (
         <>
@@ -98,7 +91,7 @@ export default function LearningPath() {
       {message && <p className="text-red-600 mt-4 font-semibold">{message}</p>}
 
       {/* Display Learning Path */}
-      {learningPath && (
+      {learningPath?.learning_path && (
         <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-bold text-maroon mb-4">📚 Your Learning Path</h2>
           <ul className="list-disc pl-5 space-y-2">
