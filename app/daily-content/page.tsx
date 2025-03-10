@@ -5,9 +5,23 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 
+// ✅ Define Type for API Response
+type DailyContentType = {
+  problem_of_the_day: {
+    problem: string;
+    hint: string;
+  };
+  news_articles: {
+    title: string;
+    summary: string;
+    url: string;
+    source: string;
+  }[];
+};
+
 export default function DailyContent() {
-  const [userId, setUserId] = useState("");  // ✅ User ID Input
-  const [dailyContent, setDailyContent] = useState(null);
+  const [userId, setUserId] = useState(""); // ✅ User ID Input
+  const [dailyContent, setDailyContent] = useState<DailyContentType | null>(null); // ✅ Typed State
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -19,7 +33,7 @@ export default function DailyContent() {
     }
 
     const url = `https://visionx-backend.onrender.com/daily-content/?user_id=${userId}`;
-    console.log("🔍 Fetching Daily Content from:", url);  // ✅ Log the final API call
+    console.log("🔍 Fetching Daily Content from:", url); // ✅ Log the final API call
 
     setLoading(true);
     try {
@@ -28,13 +42,13 @@ export default function DailyContent() {
         headers: { "Content-Type": "application/json" },
       });
 
-      const data = await response.json();
-      console.log("📩 Server Response:", data);  // ✅ Log the server response
+      const data: DailyContentType = await response.json(); // ✅ Enforce Type
+      console.log("📩 Server Response:", data); // ✅ Log the server response
 
       if (response.ok) {
         setDailyContent(data);
       } else {
-        setMessage(data.detail || "❌ Failed to fetch daily content.");
+        setMessage("❌ Failed to fetch daily content.");
       }
     } catch (error) {
       console.error("❌ Fetch Error:", error);
@@ -65,8 +79,8 @@ export default function DailyContent() {
       {dailyContent && (
         <div className="mt-6 p-4 border rounded-lg bg-white">
           <h2 className="text-xl font-semibold">🧩 Problem of the Day</h2>
-          <p className="text-gray-700">{dailyContent.problem_of_the_day.problem}</p>
-          <p className="text-gray-500">💡 Hint: {dailyContent.problem_of_the_day.hint}</p>
+          <p className="text-gray-700">{dailyContent.problem_of_the_day?.problem}</p>
+          <p className="text-gray-500">💡 Hint: {dailyContent.problem_of_the_day?.hint}</p>
 
           <h2 className="text-xl font-semibold mt-6">📰 News Articles</h2>
           {dailyContent.news_articles.map((article, index) => (
